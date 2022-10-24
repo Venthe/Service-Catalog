@@ -23,7 +23,7 @@ links:
     type: Documentation
     url: https://wiki.example.com/Example-Service
   - description: API contract
-    name: Wiki
+    name: Contract
     type: Documentation
     url: https://git.example.com/Example-Service/blob/main/documentation/api/contract.openapi.yml
 metadata:
