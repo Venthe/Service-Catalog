@@ -1,0 +1,403 @@
+---
+# Based on Cortex fileformat
+# TODO: Add unique identifiers for the checks
+title: Example service
+description: Description for the service
+tags:
+  - example
+owners:
+  - role: Product Owner
+    type: Email
+    value: john.doe@example.com
+  - name: Sample Team
+    role: Development team
+    type: Email
+    value: sample.team@example.com
+links:
+  - description: Main readme for the service
+    name: Read me
+    type: Documentation
+    url: https://git.example.com/Example-Service/blob/main/readme.md
+  - description: Main documentation store
+    name: Wiki
+    type: Documentation
+    url: https://wiki.example.com/Example-Service
+  - description: API contract
+    name: Wiki
+    type: Documentation
+    url: https://git.example.com/Example-Service/blob/main/documentation/api/contract.openapi.yml
+metadata:
+  deployments:
+    - cluster: staging
+      identifier: example-service/dev
+      type: Kubernetes
+    - cluster: staging
+      identifier: example-service/uat
+      type: Kubernetes
+    - cluster: production
+      identifier: example-service
+      type: Kubernetes
+  onCall:
+    - identifier: 9a653a75-3523-4df1-a5dc-ad5f074ad64c
+      type: GrafanaOnCall
+  repository:
+    - name: Github
+      type: Git
+      url: https://git.example.com/Example-Service
+customMetadata:
+  - name: Observability
+    type: Group
+    value:
+      - name: Alerts
+        type: Group
+        value:
+          - description: Container host alerts are properly configured (e.g. Memory, ulimit, CPU, Swap)
+            type: Boolean
+            value: undefined
+          - description: Container specific alerts are properly configured (e.g. JVM Heap)
+            type: Boolean
+            value: undefined
+          - description: Suspicious request detection is set up
+            type: Boolean
+            value: undefined
+      - name: Metrics
+        type: Group
+        value:
+          - description: Service exposes metrics in Prometheus format.
+            type: Boolean
+            value: undefined
+          - description: Service exposes state of a dependent subsystems as a Prometheus metrics.
+            type: Boolean
+            value: undefined
+          - description: Prometheus is scraping metrics from service endpoints.
+            type: Boolean
+            value: undefined
+          - description: Prometheus metrics naming should follow Micrometer recommendations (https://prometheus.io/docs/practices/naming/).
+            type: Boolean
+            value: undefined
+          - description: Service metric endpoint should be publicly accessible.
+            type: Boolean
+            value: undefined
+          - description: Business monitoring custom metrics are exposed (e.g. number of clients, number of transactions for client/service journey analysis, order cancellations).
+            type: Boolean
+            value: undefined
+          # Maybe not here? JVM specifics
+          - description: (WIP) Service is linked with Spring-boot admin application for additional debugging options.
+            type: Boolean
+            value: undefined
+      - name: Dashboards
+        type: Group
+        value:
+          - description: Service has data (metrics) for Micrometer visualisation.
+            children:
+              - type: Link
+                value: https://grafana.example.com/dashboards/1
+              - name: JVM statistics
+                type: Link
+                value: https://grafana.example.com/dashboards/2
+            type: Combined
+            value: undefined
+      - name: Logging
+        type: Group
+        value:
+          - description: Service is streaming logs entries to /std/out in plain text format (Allows for a human-readable access).
+            type: Boolean
+            value: undefined
+          - description: Service is streaming logs in JSONL format (Allows for a machine-readable access).
+            type: Boolean
+            value: undefined
+          - description: Service JSONL logs are ingested by the log aggregator.
+            type: Boolean
+            value: undefined
+          - description: Service has no DEBUG level enabled by default.
+            type: Boolean
+            value: undefined
+          - description: "Log entries should have X-Correlation-ID (OpenTracing standard)."
+            type: Boolean
+            value: undefined
+      - name: Tracing
+        type: Group
+        value:
+          - description: Service is using tracing for dependent subsystems (database, message queue, cache, etc).
+            type: Boolean
+            value: undefined
+          - description: Service should expose X-Correlation-ID header for identifying all underlaying systems (OpenTracing standard).
+            type: Boolean
+            value: undefined
+          - description: Service is able to identify which application is requesting the data
+            type: Boolean
+            value: undefined
+  - name: Operational
+    type: Group
+    value:
+      - name: Generic
+        type: Group
+        value:
+          - description: Service has a deployment manifest in a declarative format stored in git (helm chart, helm values, GitOps release manifest, etc).
+            type: Boolean
+            value: undefined
+          - description: Service is using an automated approach to migrate its database.
+            type: Boolean
+            value: undefined
+          - description: Service is using an automated approach to rollback its database changes.
+            type: Boolean
+            value: undefined
+          - description: Service has clear and accessible information about current release in the environment.
+            type: Boolean
+            value: undefined
+          - description: Service has clear and accessible information about values used for current release.
+            type: Boolean
+            value: undefined
+          - description: Service deployment has release history that can be used for efficient rollback.
+            type: Boolean
+            value: undefined
+          - description: No manual operation needed for service release.
+            type: Boolean
+            value: undefined
+          - description: Service should be stateless. No volumes or any kind of persistence should be provided.
+            type: Boolean
+            value: undefined
+          - description: Only service has access to its data (database, etc). Any kind of access to data should be provided via API.
+            type: Boolean
+            value: undefined
+          - description: Service is using a clear and consistent versioning schema (i.e. SemVer, CalVer, Stable Consecutive ID's)
+            type: Boolean
+            value: undefined
+          - description: Service exposes debug ports on non-production environments
+            type: Boolean
+            value: undefined
+      - name: Deployment Pipeline
+        type: Group
+        value:
+          - name: Continuous Integration
+            type: Group
+            value:
+              - description: Service has Continuous Integration build attached
+                type: Boolean
+                value: undefined
+              - description: Service has code formatting checker attached to pipeline, which posts results to MR.
+                type: Boolean
+                value: undefined
+              - description: Service has code dependency analyzer attached to pipeline, which posts results to MR.
+                type: Boolean
+                value: undefined
+              - description: Service has static code analyzer attached to pipeline, which posts results to MR.
+                type: Boolean
+                value: undefined
+              - description: Service has profanity filter attached to pipeline, which posts results to MR.
+                type: Boolean
+                value: undefined
+              - description: Service has unit tests attached to pipeline, which posts results to MR.
+                type: Boolean
+                value: undefined
+              - description: Service has integration tests attached to pipeline, which posts results to MR.
+                type: Boolean
+                value: undefined
+              - description: Service has soak tests attached to pipeline, which posts results to owners.
+                type: Boolean
+                value: undefined
+              - description: Service has performance tests attached to pipeline, which posts results to owners.
+                type: Boolean
+                value: undefined
+              - description: Service has E2E tests attached to pipeline, which posts results to owners.
+                type: Boolean
+                value: undefined
+              - description: Service has chaos tests attached to pipeline, which posts results to owners.
+                type: Boolean
+                value: undefined
+              - description: Service has commit message validation attached to pipeline, which posts results to MR.
+                type: Boolean
+                value: undefined
+          - name: Continuous Delivery
+            type: Group
+            value:
+              - description: Service can be deployed at any given point without manual steps.
+                type: Boolean
+                value: undefined
+              - description: After each commit, service is in a deployable state.
+                type: Boolean
+                value: undefined
+      - name: Containers
+        type: Group
+        value:
+          - description: "Container version is not using a moving tag (e.g. latest)"
+            type: Boolean
+            value: undefined
+          - description: Docker entrypoint script usage service should use process manager (E.g. https://github.com/krallin/tini)
+            type: Boolean
+            value: undefined
+          - description: Container build uses docker build best-practices (https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
+            type: Boolean
+            value: undefined
+      - name: Documentation
+        type: Group
+        value:
+          - description: Application's name, description, ownership and dependencies are clearly documented in repository.
+            type: Boolean
+            value: undefined
+          - description: Architecture decision records are strored in repository.
+            type: Boolean
+            value: undefined
+          - description: Responsible contacts are noted inside of the repository.
+            type: Boolean
+            value: undefined
+          - description: Documentation about release process is present in the repository.
+            type: Boolean
+            value: undefined
+          - description: Documentation from repository is deployed to Wiki.
+            type: Boolean
+            value: undefined
+          - description: Software Bill of Materials is stored alongside deployment artifact.
+            type: Boolean
+            value: undefined
+          - description: Release notes are stored alongside deployment artifact.
+            type: Boolean
+            value: undefined
+      - name: Security
+        type: Group
+        value:
+          - description: Sensitive informations are stored in a secret manager (E.g. vault).
+            type: Boolean
+            value: undefined
+          - description: Non sensitive information are stored in a values for particular environment deployment (GitOps)
+            type: Boolean
+            value: undefined
+          - description: Continuous Integration verifies that no secret is exposed by any commit (Private key, passwords, tokens, etc.)
+            type: Boolean
+            value: undefined
+          - description: Secrets are rotated periodically (E.g each 30d; passwords, tokens and private keys)
+            type: Boolean
+            value: undefined
+      - name: GDPR
+        type: Group
+        value:
+          - description: Sensitive data is identified.
+            type: Boolean
+            value: undefined
+          - description: Sensitive data has a mechanism of anonymization.
+            type: Boolean
+            value: undefined
+          - description: Access to sensitive data is logged.
+            type: Boolean
+            value: undefined
+          - description: Interested party is informed about anonymization
+            type: Boolean
+            value: undefined
+  - name: Reliability
+    type: Group
+    value:
+      - name: Incident Management
+        type: Group
+        value:
+          - description: Service is covered by a 24/7 support
+            type: Boolean
+            value: undefined
+          - description: At least two people are available for on-call in any given moment
+            type: Boolean
+            value: undefined
+          - description: Incident response system is set up.
+            type: Boolean
+            value: undefined
+      - name: Application
+        type: Group
+        value:
+          - description: Service is deployed in more then 1 replica
+            type: Boolean
+            value: undefined
+          - description: Pod disruption budget is defined for workload (https://kubernetes.io/docs/tasks/run-application/configure-pdb/).
+            type: Boolean
+            value: undefined
+          - description: No more than particular % of replicas could be unavailable (50% for example) in particular period of time.
+            type: Boolean
+            value: undefined
+          - description: Service can be scaled horizontally manually to handle changes in the workload.
+            type: Boolean
+            value: undefined
+          - description: Service automatically scales horizontally to handle fluctuating workloads (e.g. via Prometheus metrics).
+            type: Boolean
+            value: undefined
+          - description: Service CPU/Memory limit and request are set
+            type: Boolean
+            value: undefined
+          - description: Service has a well-known health check endpoint /health
+            type: Boolean
+            value: undefined
+          - description: Readiness Probe is defined and used
+            type: Boolean
+            value: undefined
+          - description: Liveness Probe is defined and used
+            type: Boolean
+            value: undefined
+          - description: Startup Probes is defined and used
+            type: Boolean
+            value: undefined
+          - description: Service has a graceful degradation mechanism
+            type: Boolean
+            value: undefined
+          - description: Service has zero-downtime deployments.
+            type: Boolean
+            value: undefined
+          - description: Service has a graceful shutdown. Ensure that stopping the service is not going to cause issues.
+            type: Boolean
+            value: undefined
+          - description: Service handles failure of dependencies (Database, Kafka, Cache engine, etc.) gracefully (e.g. by readiness probe).
+            type: Boolean
+            value: undefined
+          - description: Service has podAntiAffinity policies. One instance of microservice shouldn't be hosted with another service replica on the same node.
+            type: Boolean
+            value: undefined
+          - description: Service has a topology key which allows service be spread across at least two data centres
+            type: Boolean
+            value: undefined
+          - description: Service configuration is only using DNS entries for addresses.
+            type: Boolean
+            value: undefined
+          - description: Service is using a Circuit Breaker for any outbound connections.
+            type: Boolean
+            value: undefined
+      - name: Persistence
+        type: Group
+        value:
+          - description: Service has Recovery Time Objective (RTO) defined (RTO is the maximum acceptable delay between the interruption of service and restoration of service)
+            type: Boolean
+            value: undefined
+          - description: Service has Recovery Point Objective (RPO) defined ( RPO is the maximum acceptable amount of time since the last data recovery point)
+            type: Boolean
+            value: undefined
+          - description: Cache unavailability, staleness or misses are not affecting service availability and service functionality
+            type: Boolean
+            value: undefined
+          - description: Ensure that databases are spread across at least two data centres
+            type: Boolean
+            value: undefined
+  # Maybe this shouldn't be defined in this document?
+  - name: Development best practices
+    type: Group
+    value:
+      - description: API is defined as contracts (i.e. Kafka Avro, OpenApi)
+        type: Boolean
+        value: undefined
+      - description: GIT commits are following best practices (https://cbea.ms/git-commit/)
+        type: Boolean
+        value: undefined
+      - description: GIT commits are using a well-defined schema (E.g. conventional commits)
+        type: Boolean
+        value: undefined
+      - description: Developer workstation can be set-up with a single command
+        type: Boolean
+        value: undefined
+      - description: Application development dependencies can be set up with a single command
+        type: Boolean
+        value: undefined
+      - description: New features are developed behind feature flags
+        type: Boolean
+        value: undefined
+      - description: New features have logs that allow for a full debug from logs alone
+        type: Boolean
+        value: undefined
+      - description: Persistence migration scripts have rollback mechanisms
+        type: Boolean
+        value: undefined
+      - description: Every dependency version is pinned
+        type: Boolean
+        value: undefined
