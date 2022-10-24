@@ -1,0 +1,19 @@
+{
+  "name": "service-catalog-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bin/index.js",
+  "bin": {
+    "servicecatalog": "./bin/index.js"
+  },
+  "scripts": {
+    "build:example": "node . --input=./example.yml --output=./output.md --outputFormat=Markdown"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "markdown-it": "^13.0.1",
+    "yaml": "^2.1.3",
+    "yargs": "^17.6.0"
+  }
+}
